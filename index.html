@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Mini App</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Contact Us</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <h1>Welcome to Our Mini App</h1>
+    <h1>Contact Us</h1>
     <form id="contactForm">
         <input type="text" id="name" placeholder="Your Name" required>
         <input type="email" id="email" placeholder="Your Email" required>
@@ -16,6 +15,31 @@
         <button type="submit">Submit</button>
     </form>
 
-    <script src="script.js"></script>
+    <script>
+        const form = document.getElementById('contactForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            // 发送数据到 Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbwo9IwiQglNdgoBG7B-SyAejpq2E3sJXL4BjXf6lY6RpKw04CBZwMuKEIKCHKWlIRwKUw/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email, message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Message sent successfully!');
+                Telegram.WebApp.close(); // 关闭 Mini App
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
 </body>
 </html>
